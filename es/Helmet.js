@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import withSideEffect from 'react-side-effect';
-import isEqual from 'react-fast-compare';
+import { isEqual } from 'lodash';
 import React from 'react';
 import objectAssign from 'object-assign';
 
@@ -910,4 +910,5 @@ var HelmetSideEffects = withSideEffect(reducePropsToState, handleClientStateChan
 var HelmetExport = Helmet(HelmetSideEffects);
 HelmetExport.renderStatic = HelmetExport.rewind;
 
+export default HelmetExport;
 export { HelmetExport as Helmet };
