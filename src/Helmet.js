@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import withSideEffect from "react-side-effect";
-import { isEqual } from "lodash-es";
 import {
     convertReactPropstoHtmlAttributes,
     handleClientStateChange,
@@ -9,7 +8,8 @@ import {
     reducePropsToState,
     warn
 } from "./HelmetUtils.js";
-import { TAG_NAMES, VALID_TAG_NAMES } from "./HelmetConstants.js";
+import {TAG_NAMES, VALID_TAG_NAMES} from "./HelmetConstants.js";
+import {isDeepStrictEqual} from "util";
 
 const Helmet = Component =>
     class HelmetWrapper extends React.Component {
@@ -90,7 +90,7 @@ const Helmet = Component =>
         }
 
         shouldComponentUpdate(nextProps) {
-            return !isEqual(this.props, nextProps);
+            return !isDeepStrictEqual(this.props, nextProps);
         }
 
         mapNestedChildrenToProps(child, nestedChildren) {
@@ -112,7 +112,9 @@ const Helmet = Component =>
             }
 
             throw new Error(
-                `<${child.type} /> elements are self-closing and can not contain children. 
+                `<${
+                    child.type
+                } /> elements are self-closing and can not contain children. 
                 Refer to our API for more information.`
             );
         }
@@ -146,30 +148,30 @@ const Helmet = Component =>
                     return {
                         ...newProps,
                         [child.type]: nestedChildren,
-                        titleAttributes: { ...newChildProps }
+                        titleAttributes: {...newChildProps}
                     };
 
                 case TAG_NAMES.BODY:
                     return {
                         ...newProps,
-                        bodyAttributes: { ...newChildProps }
+                        bodyAttributes: {...newChildProps}
                     };
 
                 case TAG_NAMES.HTML:
                     return {
                         ...newProps,
-                        htmlAttributes: { ...newChildProps }
+                        htmlAttributes: {...newChildProps}
                     };
             }
 
             return {
                 ...newProps,
-                [child.type]: { ...newChildProps }
+                [child.type]: {...newChildProps}
             };
         }
 
         mapArrayTypeChildrenToProps(arrayTypeChildren, newProps) {
-            let newFlattenedProps = { ...newProps };
+            let newFlattenedProps = {...newProps};
 
             Object.keys(arrayTypeChildren).forEach(arrayChildName => {
                 newFlattenedProps = {
@@ -191,8 +193,12 @@ const Helmet = Component =>
                     }
 
                     return warn(
-                        `Only elements types ${VALID_TAG_NAMES.join(", ")} are allowed. 
-                        Helmet does not support rendering <${child.type}> elements. Refer to our API for more information.`
+                        `Only elements types ${VALID_TAG_NAMES.join(
+                            ", "
+                        )} are allowed. 
+                        Helmet does not support rendering <${
+                            child.type
+                        }> elements. Refer to our API for more information.`
                     );
                 }
 
@@ -206,7 +212,9 @@ const Helmet = Component =>
                 ) {
                     throw new Error(
                         `Helmet expects a string as a child of <${child.type}>. 
-                        Did you forget to wrap your children in braces? ( <${child.type}>{\`\`}</${child.type}> ) 
+                        Did you forget to wrap your children in braces? ( <${
+                            child.type
+                        }>{\`\`}</${child.type}> ) 
                         Refer to our API for more information.`
                     );
                 }
@@ -223,7 +231,7 @@ const Helmet = Component =>
                     return;
                 }
 
-                const { children: nestedChildren, ...childProps } = child.props;
+                const {children: nestedChildren, ...childProps} = child.props;
                 const newChildProps = convertReactPropstoHtmlAttributes(
                     childProps
                 );
@@ -263,8 +271,8 @@ const Helmet = Component =>
         }
 
         render() {
-            const { children, ...props } = this.props;
-            let newProps = { ...props };
+            const {children, ...props} = this.props;
+            let newProps = {...props};
 
             if (children) {
                 newProps = this.mapChildrenToProps(children, newProps);
@@ -285,5 +293,5 @@ const HelmetSideEffects = withSideEffect(
 const HelmetExport = Helmet(HelmetSideEffects);
 HelmetExport.renderStatic = HelmetExport.rewind;
 
-export { HelmetExport as Helmet };
+export {HelmetExport as Helmet};
 export default HelmetExport;

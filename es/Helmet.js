@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import withSideEffect from 'react-side-effect';
-import { isEqual } from 'lodash-es';
 import React from 'react';
 import objectAssign from 'object-assign';
+import { isDeepStrictEqual } from 'util';
 
 var ATTRIBUTE_NAMES = {
     BODY: "bodyAttributes",
@@ -671,7 +671,7 @@ var Helmet = function Helmet(Component) {
         }
 
         HelmetWrapper.prototype.shouldComponentUpdate = function shouldComponentUpdate(nextProps) {
-            return !isEqual(this.props, nextProps);
+            return !isDeepStrictEqual(this.props, nextProps);
         };
 
         HelmetWrapper.prototype.mapNestedChildrenToProps = function mapNestedChildrenToProps(child, nestedChildren) {
@@ -692,7 +692,7 @@ var Helmet = function Helmet(Component) {
                     };
             }
 
-            throw new Error("<" + child.type + " /> elements are self-closing and can not contain children. Refer to our API for more information.");
+            throw new Error("<" + child.type + " /> elements are self-closing and can not contain children. \n                Refer to our API for more information.");
         };
 
         HelmetWrapper.prototype.flattenArrayTypeChildren = function flattenArrayTypeChildren(_ref) {
@@ -753,13 +753,13 @@ var Helmet = function Helmet(Component) {
                         return warn("You may be attempting to nest <Helmet> components within each other, which is not allowed. Refer to our API for more information.");
                     }
 
-                    return warn("Only elements types " + VALID_TAG_NAMES.join(", ") + " are allowed. Helmet does not support rendering <" + child.type + "> elements. Refer to our API for more information.");
+                    return warn("Only elements types " + VALID_TAG_NAMES.join(", ") + " are allowed. \n                        Helmet does not support rendering <" + child.type + "> elements. Refer to our API for more information.");
                 }
 
                 if (nestedChildren && typeof nestedChildren !== "string" && (!Array.isArray(nestedChildren) || nestedChildren.some(function (nestedChild) {
                     return typeof nestedChild !== "string";
                 }))) {
-                    throw new Error("Helmet expects a string as a child of <" + child.type + ">. Did you forget to wrap your children in braces? ( <" + child.type + ">{``}</" + child.type + "> ) Refer to our API for more information.");
+                    throw new Error("Helmet expects a string as a child of <" + child.type + ">. \n                        Did you forget to wrap your children in braces? ( <" + child.type + ">{``}</" + child.type + "> ) \n                        Refer to our API for more information.");
                 }
             }
 
