@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import withSideEffect from 'react-side-effect';
-import { isEqual } from 'lodash';
 import React from 'react';
 import objectAssign from 'object-assign';
+import deepEqual from 'deep-equal';
 
 var ATTRIBUTE_NAMES = {
     BODY: "bodyAttributes",
@@ -671,7 +671,7 @@ var Helmet = function Helmet(Component) {
         }
 
         HelmetWrapper.prototype.shouldComponentUpdate = function shouldComponentUpdate(nextProps) {
-            return !isEqual(this.props, nextProps);
+            return !deepEqual(this.props, nextProps, true);
         };
 
         HelmetWrapper.prototype.mapNestedChildrenToProps = function mapNestedChildrenToProps(child, nestedChildren) {
@@ -692,7 +692,7 @@ var Helmet = function Helmet(Component) {
                     };
             }
 
-            throw new Error("<" + child.type + " /> elements are self-closing and can not contain children. Refer to our API for more information.");
+            throw new Error("<" + child.type + " /> elements are self-closing and can not contain children. \n                Refer to our API for more information.");
         };
 
         HelmetWrapper.prototype.flattenArrayTypeChildren = function flattenArrayTypeChildren(_ref) {
@@ -753,13 +753,13 @@ var Helmet = function Helmet(Component) {
                         return warn("You may be attempting to nest <Helmet> components within each other, which is not allowed. Refer to our API for more information.");
                     }
 
-                    return warn("Only elements types " + VALID_TAG_NAMES.join(", ") + " are allowed. Helmet does not support rendering <" + child.type + "> elements. Refer to our API for more information.");
+                    return warn("Only elements types " + VALID_TAG_NAMES.join(", ") + " are allowed. \n                        Helmet does not support rendering <" + child.type + "> elements. Refer to our API for more information.");
                 }
 
                 if (nestedChildren && typeof nestedChildren !== "string" && (!Array.isArray(nestedChildren) || nestedChildren.some(function (nestedChild) {
                     return typeof nestedChild !== "string";
                 }))) {
-                    throw new Error("Helmet expects a string as a child of <" + child.type + ">. Did you forget to wrap your children in braces? ( <" + child.type + ">{``}</" + child.type + "> ) Refer to our API for more information.");
+                    throw new Error("Helmet expects a string as a child of <" + child.type + ">. \n                        Did you forget to wrap your children in braces? ( <" + child.type + ">{``}</" + child.type + "> ) \n                        Refer to our API for more information.");
                 }
             }
 
@@ -837,22 +837,22 @@ var Helmet = function Helmet(Component) {
             // Don’t use it for anything other than testing.
 
             /**
-            * @param {Object} base: {"target": "_blank", "href": "http://mysite.com/"}
-            * @param {Object} bodyAttributes: {"className": "root"}
-            * @param {String} defaultTitle: "Default Title"
-            * @param {Boolean} defer: true
-            * @param {Boolean} encodeSpecialCharacters: true
-            * @param {Object} htmlAttributes: {"lang": "en", "amp": undefined}
-            * @param {Array} link: [{"rel": "canonical", "href": "http://mysite.com/example"}]
-            * @param {Array} meta: [{"name": "description", "content": "Test description"}]
-            * @param {Array} noscript: [{"innerHTML": "<img src='http://mysite.com/js/test.js'"}]
-            * @param {Function} onChangeClientState: "(newState) => console.log(newState)"
-            * @param {Array} script: [{"type": "text/javascript", "src": "http://mysite.com/js/test.js"}]
-            * @param {Array} style: [{"type": "text/css", "cssText": "div { display: block; color: blue; }"}]
-            * @param {String} title: "Title"
-            * @param {Object} titleAttributes: {"itemprop": "name"}
-            * @param {String} titleTemplate: "MySite.com - %s"
-            */
+             * @param {Object} base: {"target": "_blank", "href": "http://mysite.com/"}
+             * @param {Object} bodyAttributes: {"className": "root"}
+             * @param {String} defaultTitle: "Default Title"
+             * @param {Boolean} defer: true
+             * @param {Boolean} encodeSpecialCharacters: true
+             * @param {Object} htmlAttributes: {"lang": "en", "amp": undefined}
+             * @param {Array} link: [{"rel": "canonical", "href": "http://mysite.com/example"}]
+             * @param {Array} meta: [{"name": "description", "content": "Test description"}]
+             * @param {Array} noscript: [{"innerHTML": "<img src='http://mysite.com/js/test.js'"}]
+             * @param {Function} onChangeClientState: "(newState) => console.log(newState)"
+             * @param {Array} script: [{"type": "text/javascript", "src": "http://mysite.com/js/test.js"}]
+             * @param {Array} style: [{"type": "text/css", "cssText": "div { display: block; color: blue; }"}]
+             * @param {String} title: "Title"
+             * @param {Object} titleAttributes: {"itemprop": "name"}
+             * @param {String} titleTemplate: "MySite.com - %s"
+             */
             set: function set$$1(canUseDOM) {
                 Component.canUseDOM = canUseDOM;
             }

@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import withSideEffect from "react-side-effect";
-import { isEqual } from "lodash";
 import {
     convertReactPropstoHtmlAttributes,
     handleClientStateChange,
@@ -10,26 +9,27 @@ import {
     warn
 } from "./HelmetUtils.js";
 import {TAG_NAMES, VALID_TAG_NAMES} from "./HelmetConstants.js";
+import deepEqual from "deep-equal";
 
 const Helmet = Component =>
     class HelmetWrapper extends React.Component {
         /**
-     * @param {Object} base: {"target": "_blank", "href": "http://mysite.com/"}
-     * @param {Object} bodyAttributes: {"className": "root"}
-     * @param {String} defaultTitle: "Default Title"
-     * @param {Boolean} defer: true
-     * @param {Boolean} encodeSpecialCharacters: true
-     * @param {Object} htmlAttributes: {"lang": "en", "amp": undefined}
-     * @param {Array} link: [{"rel": "canonical", "href": "http://mysite.com/example"}]
-     * @param {Array} meta: [{"name": "description", "content": "Test description"}]
-     * @param {Array} noscript: [{"innerHTML": "<img src='http://mysite.com/js/test.js'"}]
-     * @param {Function} onChangeClientState: "(newState) => console.log(newState)"
-     * @param {Array} script: [{"type": "text/javascript", "src": "http://mysite.com/js/test.js"}]
-     * @param {Array} style: [{"type": "text/css", "cssText": "div { display: block; color: blue; }"}]
-     * @param {String} title: "Title"
-     * @param {Object} titleAttributes: {"itemprop": "name"}
-     * @param {String} titleTemplate: "MySite.com - %s"
-     */
+         * @param {Object} base: {"target": "_blank", "href": "http://mysite.com/"}
+         * @param {Object} bodyAttributes: {"className": "root"}
+         * @param {String} defaultTitle: "Default Title"
+         * @param {Boolean} defer: true
+         * @param {Boolean} encodeSpecialCharacters: true
+         * @param {Object} htmlAttributes: {"lang": "en", "amp": undefined}
+         * @param {Array} link: [{"rel": "canonical", "href": "http://mysite.com/example"}]
+         * @param {Array} meta: [{"name": "description", "content": "Test description"}]
+         * @param {Array} noscript: [{"innerHTML": "<img src='http://mysite.com/js/test.js'"}]
+         * @param {Function} onChangeClientState: "(newState) => console.log(newState)"
+         * @param {Array} script: [{"type": "text/javascript", "src": "http://mysite.com/js/test.js"}]
+         * @param {Array} style: [{"type": "text/css", "cssText": "div { display: block; color: blue; }"}]
+         * @param {String} title: "Title"
+         * @param {Object} titleAttributes: {"itemprop": "name"}
+         * @param {String} titleTemplate: "MySite.com - %s"
+         */
         static propTypes = {
             base: PropTypes.object,
             bodyAttributes: PropTypes.object,
@@ -90,7 +90,7 @@ const Helmet = Component =>
         }
 
         shouldComponentUpdate(nextProps) {
-            return !isEqual(this.props, nextProps);
+            return !deepEqual(this.props, nextProps, true);
         }
 
         mapNestedChildrenToProps(child, nestedChildren) {
@@ -112,7 +112,10 @@ const Helmet = Component =>
             }
 
             throw new Error(
-                `<${child.type} /> elements are self-closing and can not contain children. Refer to our API for more information.`
+                `<${
+                    child.type
+                } /> elements are self-closing and can not contain children. 
+                Refer to our API for more information.`
             );
         }
 
@@ -192,7 +195,10 @@ const Helmet = Component =>
                     return warn(
                         `Only elements types ${VALID_TAG_NAMES.join(
                             ", "
-                        )} are allowed. Helmet does not support rendering <${child.type}> elements. Refer to our API for more information.`
+                        )} are allowed. 
+                        Helmet does not support rendering <${
+                            child.type
+                        }> elements. Refer to our API for more information.`
                     );
                 }
 
@@ -205,7 +211,11 @@ const Helmet = Component =>
                         ))
                 ) {
                     throw new Error(
-                        `Helmet expects a string as a child of <${child.type}>. Did you forget to wrap your children in braces? ( <${child.type}>{\`\`}</${child.type}> ) Refer to our API for more information.`
+                        `Helmet expects a string as a child of <${child.type}>. 
+                        Did you forget to wrap your children in braces? ( <${
+                            child.type
+                        }>{\`\`}</${child.type}> ) 
+                        Refer to our API for more information.`
                     );
                 }
             }
