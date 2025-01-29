@@ -9,7 +9,7 @@ import {
     warn
 } from "./HelmetUtils.js";
 import {TAG_NAMES, VALID_TAG_NAMES} from "./HelmetConstants.js";
-import {isDeepStrictEqual} from "util";
+import deepEqual from "deep-equal";
 
 const Helmet = Component =>
     class HelmetWrapper extends React.Component {
@@ -90,7 +90,7 @@ const Helmet = Component =>
         }
 
         shouldComponentUpdate(nextProps) {
-            return !isDeepStrictEqual(this.props, nextProps);
+            return !deepEqual(this.props, nextProps, true);
         }
 
         mapNestedChildrenToProps(child, nestedChildren) {

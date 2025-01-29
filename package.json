@@ -31,11 +31,11 @@
     "react": ">=15.0.0"
   },
   "dependencies": {
+    "deep-equal": "^2.2.3",
     "object-assign": "^4.1.1",
     "prop-types": "^15.5.4",
     "react-fast-compare": "^2.0.2",
-    "react-side-effect": "^1.1.0",
-    "util": "^0.12.5"
+    "react-side-effect": "^1.1.0"
   },
   "devDependencies": {
     "babel-core": "^6.24.0",

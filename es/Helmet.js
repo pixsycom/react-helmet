@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import withSideEffect from 'react-side-effect';
 import React from 'react';
 import objectAssign from 'object-assign';
-import { isDeepStrictEqual } from 'util';
+import deepEqual from 'deep-equal';
 
 var ATTRIBUTE_NAMES = {
     BODY: "bodyAttributes",
@@ -671,7 +671,7 @@ var Helmet = function Helmet(Component) {
         }
 
         HelmetWrapper.prototype.shouldComponentUpdate = function shouldComponentUpdate(nextProps) {
-            return !isDeepStrictEqual(this.props, nextProps);
+            return !deepEqual(this.props, nextProps, true);
         };
 
         HelmetWrapper.prototype.mapNestedChildrenToProps = function mapNestedChildrenToProps(child, nestedChildren) {
